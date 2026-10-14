@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: flexi-rate-calculator
+billing:
+  max-users: 1000
+  max-events: 100000
+  max-request-bytes: 16777216
+  cache-enabled: true
+  cache-maximum-size: 1024

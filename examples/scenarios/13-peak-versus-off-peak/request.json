@@ -1,0 +1,509 @@
+{
+  "users": [
+    {
+      "user_id": "peak",
+      "is_enterprise": false,
+      "timezone": "UTC"
+    },
+    {
+      "user_id": "off-peak",
+      "is_enterprise": false,
+      "timezone": "UTC"
+    }
+  ],
+  "events": [
+    {
+      "event_id": "peak-1",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T00:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-2",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T00:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-3",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T00:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-4",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T00:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-5",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T01:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-6",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T01:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-7",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T01:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-8",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T01:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-9",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T02:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-10",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T02:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-11",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T02:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-12",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T02:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-13",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T03:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-14",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T03:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-15",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T03:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-16",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T03:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-17",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T04:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-18",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T04:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-19",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T04:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-20",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T04:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-21",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T05:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-22",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T05:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-23",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T05:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-24",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T05:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-25",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T06:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-26",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T06:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-27",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T06:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-28",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T06:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-29",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T07:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-30",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T07:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-31",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T07:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-32",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T07:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-33",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T08:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-34",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T08:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-35",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T08:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-36",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T08:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-37",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T09:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-38",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T09:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-39",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T09:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "peak-40",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T09:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-1",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T00:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-2",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T00:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-3",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T00:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-4",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T00:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-5",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T01:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-6",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T01:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-7",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T01:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-8",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T01:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-9",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T02:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-10",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T02:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-11",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T02:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-12",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T02:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-13",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T03:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-14",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T03:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-15",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T03:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-16",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T03:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-17",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T04:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-18",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T04:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-19",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T04:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-20",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T04:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-21",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T05:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-22",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T05:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-23",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T05:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-24",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T05:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-25",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T06:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-26",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T06:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-27",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T06:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-28",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T06:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-29",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T07:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-30",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T07:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-31",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T07:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-32",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T07:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-33",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T08:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-34",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T08:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-35",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T08:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-36",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T08:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-37",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T09:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-38",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T09:15:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-39",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T09:30:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-peak-40",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T09:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "paid-peak",
+      "user_id": "peak",
+      "timestamp": "2026-10-02T16:45:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "paid-off-peak",
+      "user_id": "off-peak",
+      "timestamp": "2026-10-02T17:00:00Z",
+      "duration_minutes": 15
+    }
+  ],
+  "billing_cycle": "2026-10"
+}

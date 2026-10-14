@@ -1,0 +1,130 @@
+[
+  {
+    "id": "01-valid-with-billing-cycle",
+    "title": "Valid snapshot with an explicit billing cycle",
+    "description": "41 consecutive quarter-hour chunks = 10.25 hours. The first 10 hours are free; the last paid chunk is peak usage. Base $0.25 + surcharge $0.05 = $0.30.",
+    "status": 200,
+    "invalid_count": 0,
+    "dynamic_cycle": false
+  },
+  {
+    "id": "02-malformed-event-type",
+    "title": "Array instead of integer: skip one event",
+    "description": "The exact client example: duration_minutes is [15]. That event is skipped, the valid event remains, and X-Invalid-Event-Count is 1.",
+    "status": 200,
+    "invalid_count": 1,
+    "dynamic_cycle": false
+  },
+  {
+    "id": "03-duplicate-users",
+    "title": "Duplicate user IDs reject the request",
+    "description": "Two users have user_id alice. This is a request-level error, unlike duplicate events; HTTP 400 and no invalid-event header.",
+    "status": 400,
+    "invalid_count": null,
+    "dynamic_cycle": false
+  },
+  {
+    "id": "04-without-billing-cycle",
+    "title": "Omitted cycle uses the user's current month",
+    "description": "billing_cycle is absent. 41 valid events use the generation month's dates and cost $0.30. The returned cycle uses the server clock. The Postman pre-request script refreshes event dates to the current UTC month automatically; standalone JSON/cURL files are dated snapshots and can be refreshed by rerunning the generator.",
+    "status": 200,
+    "invalid_count": 0,
+    "dynamic_cycle": true
+  },
+  {
+    "id": "05-invalid-event-values",
+    "title": "Wrong values and missing fields are skipped",
+    "description": "Skips duration 20, start time 10:07, an invalid date, a missing duration, and null. One valid 15-minute event remains; invalid count 5.",
+    "status": 200,
+    "invalid_count": 5,
+    "dynamic_cycle": false
+  },
+  {
+    "id": "06-duplicate-events",
+    "title": "Duplicate event IDs are counted once",
+    "description": "The first valid event wins. The repeated ID is skipped, so usage is 15 minutes rather than 30 minutes; invalid count 1.",
+    "status": 200,
+    "invalid_count": 1,
+    "dynamic_cycle": false
+  },
+  {
+    "id": "07-unknown-user",
+    "title": "Unknown event user is skipped",
+    "description": "An event references a user absent from users. That event is skipped; the known user's event is still billed.",
+    "status": 200,
+    "invalid_count": 1,
+    "dynamic_cycle": false
+  },
+  {
+    "id": "08-empty-events",
+    "title": "Users with no events receive zero bills",
+    "description": "Both listed users receive a bill in input order even though events is empty.",
+    "status": 200,
+    "invalid_count": 0,
+    "dynamic_cycle": false
+  },
+  {
+    "id": "09-invalid-timezone",
+    "title": "Invalid user timezone rejects the request",
+    "description": "The user timezone is needed for month boundaries; an invalid timezone is a request-level HTTP 400 error.",
+    "status": 400,
+    "invalid_count": null,
+    "dynamic_cycle": false
+  },
+  {
+    "id": "10-invalid-billing-cycle",
+    "title": "Invalid explicit month rejects the request",
+    "description": "Month 13 does not follow the required YYYY-MM cycle format; HTTP 400.",
+    "status": 400,
+    "invalid_count": null,
+    "dynamic_cycle": false
+  },
+  {
+    "id": "11-timezone-month-boundary",
+    "title": "The same UTC instant belongs to different local months",
+    "description": "2026-09-30T21:00Z is October 1 in Sofia but September 30 in UTC. For billing_cycle 2026-10, only Sofia's event counts. The UTC user's valid out-of-month event does not increase the invalid count.",
+    "status": 200,
+    "invalid_count": 0,
+    "dynamic_cycle": false
+  },
+  {
+    "id": "12-enterprise-tier-comparison",
+    "title": "Enterprise grace counts toward the rate threshold",
+    "description": "Each user has 100 hours from 400 chronological off-peak chunks. Regular: 90 eligible/paid hours at $1 = $90. Enterprise: 100 eligible hours selects $0.80, but only 90 paid hours = $72. The free allowance is per user. This is intentionally the larger request; import the collection to avoid copying its long cURL.",
+    "status": 200,
+    "invalid_count": 0,
+    "dynamic_cycle": false
+  },
+  {
+    "id": "13-peak-versus-off-peak",
+    "title": "16:45 is peak; 17:00 is off-peak",
+    "description": "Both users get their own 10 free hours. Each then has one paid quarter hour: 16:45 UTC costs $0.30 with surcharge; 17:00 UTC costs $0.25 without surcharge.",
+    "status": 200,
+    "invalid_count": 0,
+    "dynamic_cycle": false
+  },
+  {
+    "id": "14-all-events-invalid",
+    "title": "All invalid events still produce a successful batch",
+    "description": "null, an empty event object and an array-valued duration are all invalid. Return HTTP 200, a zero bill, and invalid count 3.",
+    "status": 200,
+    "invalid_count": 3,
+    "dynamic_cycle": false
+  },
+  {
+    "id": "15-invalid-request-shape",
+    "title": "The events container itself must be an array",
+    "description": "An event may be malformed, but events itself must be an array. This request has an object instead and returns HTTP 400.",
+    "status": 400,
+    "invalid_count": null,
+    "dynamic_cycle": false
+  },
+  {
+    "id": "16-malformed-json-document",
+    "title": "Truncated JSON rejects the entire document",
+    "description": "request.json is intentionally invalid JSON (the closing brace is missing). Item recovery cannot repair a broken document; HTTP 400.",
+    "status": 400,
+    "invalid_count": null,
+    "dynamic_cycle": false
+  }
+]

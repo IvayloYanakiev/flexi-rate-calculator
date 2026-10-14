@@ -1,0 +1,204 @@
+{
+  "command": "mvn -B clean verify",
+  "verified_at": "2026-10-14T19:31:55+03:00",
+  "unit_tests": 118,
+  "integration_tests": 17,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "excluded_classes": [],
+  "overall": {
+    "INSTRUCTION": {
+      "covered": 1772,
+      "missed": 59,
+      "percent": 96.78
+    },
+    "BRANCH": {
+      "covered": 104,
+      "missed": 14,
+      "percent": 88.14
+    },
+    "LINE": {
+      "covered": 385,
+      "missed": 19,
+      "percent": 95.3
+    },
+    "COMPLEXITY": {
+      "covered": 157,
+      "missed": 19,
+      "percent": 89.2
+    },
+    "METHOD": {
+      "covered": 111,
+      "missed": 6,
+      "percent": 94.87
+    },
+    "CLASS": {
+      "covered": 44,
+      "missed": 0,
+      "percent": 100.0
+    }
+  },
+  "services": {
+    "ValidationServiceImpl": {
+      "INSTRUCTION": {
+        "covered": 139,
+        "missed": 4,
+        "percent": 97.2
+      },
+      "BRANCH": {
+        "covered": 22,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "LINE": {
+        "covered": 34,
+        "missed": 2,
+        "percent": 94.44
+      },
+      "COMPLEXITY": {
+        "covered": 16,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "METHOD": {
+        "covered": 5,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0,
+        "percent": 100.0
+      }
+    },
+    "UserBillingCalculatorImpl": {
+      "INSTRUCTION": {
+        "covered": 54,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "BRANCH": {
+        "covered": 2,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "LINE": {
+        "covered": 14,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "COMPLEXITY": {
+        "covered": 5,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "METHOD": {
+        "covered": 4,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0,
+        "percent": 100.0
+      }
+    },
+    "BillingTimeServiceImpl": {
+      "INSTRUCTION": {
+        "covered": 184,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "BRANCH": {
+        "covered": 28,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "LINE": {
+        "covered": 36,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "COMPLEXITY": {
+        "covered": 24,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "METHOD": {
+        "covered": 10,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0,
+        "percent": 100.0
+      }
+    },
+    "BillingServiceImpl": {
+      "INSTRUCTION": {
+        "covered": 184,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "BRANCH": {
+        "covered": 14,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "LINE": {
+        "covered": 44,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "COMPLEXITY": {
+        "covered": 11,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "METHOD": {
+        "covered": 4,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0,
+        "percent": 100.0
+      }
+    },
+    "NonProgressivePricingPolicy": {
+      "INSTRUCTION": {
+        "covered": 88,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "BRANCH": {
+        "covered": 2,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "LINE": {
+        "covered": 21,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "COMPLEXITY": {
+        "covered": 4,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "METHOD": {
+        "covered": 3,
+        "missed": 0,
+        "percent": 100.0
+      },
+      "CLASS": {
+        "covered": 1,
+        "missed": 0,
+        "percent": 100.0
+      }
+    }
+  }
+}

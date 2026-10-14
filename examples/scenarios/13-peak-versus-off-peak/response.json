@@ -1,0 +1,43 @@
+{
+  "users": [
+    {
+      "user_id": "peak",
+      "billing_cycle": "2026-10",
+      "total_cost": 0.3,
+      "tier_breakdown": [
+        {
+          "tier": 1,
+          "hourly_rate": 1.0,
+          "eligible_hours": 0.25,
+          "free_hours": 10,
+          "billable_hours": 0.25,
+          "cost": 0.25
+        }
+      ],
+      "applied_surcharges": [
+        {
+          "type": "UTC_PEAK",
+          "percentage": 0.2,
+          "billable_peak_hours": 0.25,
+          "cost": 0.05
+        }
+      ]
+    },
+    {
+      "user_id": "off-peak",
+      "billing_cycle": "2026-10",
+      "total_cost": 0.25,
+      "tier_breakdown": [
+        {
+          "tier": 1,
+          "hourly_rate": 1.0,
+          "eligible_hours": 0.25,
+          "free_hours": 10,
+          "billable_hours": 0.25,
+          "cost": 0.25
+        }
+      ],
+      "applied_surcharges": []
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "users": [
+    {
+      "user_id": "regular",
+      "billing_cycle": "2026-10",
+      "total_cost": 90.0,
+      "tier_breakdown": [
+        {
+          "tier": 1,
+          "hourly_rate": 1.0,
+          "eligible_hours": 90,
+          "free_hours": 10,
+          "billable_hours": 90,
+          "cost": 90.0
+        }
+      ],
+      "applied_surcharges": []
+    },
+    {
+      "user_id": "enterprise",
+      "billing_cycle": "2026-10",
+      "total_cost": 72.0,
+      "tier_breakdown": [
+        {
+          "tier": 2,
+          "hourly_rate": 0.8,
+          "eligible_hours": 100,
+          "free_hours": 10,
+          "billable_hours": 90,
+          "cost": 72.0
+        }
+      ],
+      "applied_surcharges": []
+    }
+  ]
+}

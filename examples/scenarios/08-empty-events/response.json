@@ -1,0 +1,36 @@
+{
+  "users": [
+    {
+      "user_id": "alice",
+      "billing_cycle": "2026-10",
+      "total_cost": 0.0,
+      "tier_breakdown": [
+        {
+          "tier": 1,
+          "hourly_rate": 1.0,
+          "eligible_hours": 0,
+          "free_hours": 0,
+          "billable_hours": 0,
+          "cost": 0.0
+        }
+      ],
+      "applied_surcharges": []
+    },
+    {
+      "user_id": "bob",
+      "billing_cycle": "2026-10",
+      "total_cost": 0.0,
+      "tier_breakdown": [
+        {
+          "tier": 1,
+          "hourly_rate": 1.0,
+          "eligible_hours": 0,
+          "free_hours": 0,
+          "billable_hours": 0,
+          "cost": 0.0
+        }
+      ],
+      "applied_surcharges": []
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "users": [
+    {
+      "user_id": "alice",
+      "is_enterprise": false,
+      "timezone": "UTC"
+    }
+  ],
+  "events": [
+    {
+      "event_id": "bad-array",
+      "user_id": "alice",
+      "timestamp": "2026-10-02T10:00:00Z",
+      "duration_minutes": [
+        15
+      ]
+    },
+    {
+      "event_id": "good",
+      "user_id": "alice",
+      "timestamp": "2026-10-02T10:00:00Z",
+      "duration_minutes": 15
+    }
+  ],
+  "billing_cycle": "2026-10"
+}

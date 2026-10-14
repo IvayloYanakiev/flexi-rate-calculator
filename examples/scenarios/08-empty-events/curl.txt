@@ -1,0 +1,1 @@
+curl --include --request POST 'http://localhost:8080/api/v1/billing/calculate' --header 'Content-Type: application/json' --data-raw '{"users":[{"user_id":"alice","is_enterprise":false,"timezone":"UTC"},{"user_id":"bob","is_enterprise":true,"timezone":"UTC"}],"events":[],"billing_cycle":"2026-10"}'
