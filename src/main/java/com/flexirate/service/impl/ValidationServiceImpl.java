@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 /**
- * Default validation policy: rejects invalid requests but returns null/false for skippable events.
+ * Default validation policy: rejects invalid requests but returns null for skippable events.
  */
 @Service
 public class ValidationServiceImpl implements ValidationService {
@@ -105,7 +105,7 @@ public class ValidationServiceImpl implements ValidationService {
     }
 
     /**
-     * Creates a request-level 400 error; individual event failures instead return null/false.
+     * Creates a request-level 400 error; individual event failures instead return null.
      */
     private static BillingException invalid(String errorMessage) {
         return new BillingException(HttpStatus.BAD_REQUEST, "INVALID_REQUEST", errorMessage);

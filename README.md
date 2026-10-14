@@ -179,19 +179,23 @@ Caffeine suits the current local calendar cache. If a future deployment needs a 
 
 ## Tests and coverage
 
+Integration requests and expected responses are JSON fixtures. [Test resources](src/test/resources/README.md) explain the layout. Field-validation fixtures live under `src/test/resources/validation`, with one named test per invalid field case. `ExamplesIntegrationTest` sends every documented example through real HTTP: 16 scenarios plus the original request/response pair. Maven copies JSON from `examples` to the test classpath, so tests use the same files as the documentation. Expected statuses, complete response bodies and invalid-event headers are checked. A test-only fixed clock keeps the omitted-cycle example repeatable.
+
 Each service has a dedicated JUnit 5 test class: `BillingServiceTest`, `ValidationServiceTest`, `BillingTimeServiceTest`, `UserBillingCalculatorTest` and `NonProgressivePricingPolicyTest`. Calculation tests include comments explaining the inputs, arithmetic and expected bill.
 
 `BillingApiIntegrationTest` starts the real Spring application and checks DTO binding, validation, statuses, headers and billing. It includes actual HTTP tests through embedded Tomcat, including malformed-event recovery, snapshot retries and duplicate-user rejection. Filter tests check request-body limits.
 
 ```sh
 mvn test          # 118 unit tests
-mvn clean verify # also runs 17 integration tests and checks coverage
+mvn clean verify # also runs 86 integration tests and checks coverage
 ```
 
-Latest verified result: **135 tests passed**, **95.30% line coverage**, **88.14% branch coverage**. Four services have 100% line coverage; validation has 94.44%. All services have 100% branch coverage.
+Latest verified result: **204 tests passed**, **95.30% line coverage**, **88.14% branch coverage**. Four services have 100% line coverage; validation has 94.44%. All services have 100% branch coverage.
 
 JaCoCo checks at least **90% overall line coverage**, **85% overall branch coverage** and **90% line coverage per service**. All production classes are included. Open `target/site/jacoco/index.html` after `verify` for the report. [Saved coverage results](docs/coverage-results.json) record the measured run.
 
 ## Session and review records
 
 [AI session notes](docs/ai-session.md) contain the implementation request, clarifications and work summaries. [Verification notes](docs/verification.md) record commands and results. The [code review](docs/code-review.md) records the architecture and technical reviews and later refinements.
+
+The [requirements and validation review](docs/requirements-review.md) explains how event/user checks meet the assignment and records the second architecture and technical review.

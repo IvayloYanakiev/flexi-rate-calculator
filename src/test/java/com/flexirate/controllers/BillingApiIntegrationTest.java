@@ -3,11 +3,13 @@ package com.flexirate.controllers;
 import com.flexirate.FlexiRateApplication;
 import com.flexirate.config.RequestLimitFilter;
 import com.flexirate.dto.ErrorDto;
+
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
 import tools.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,6 +19,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -25,15 +28,309 @@ class BillingApiIntegrationTest {
     private static MockMvc mvc;
     private static final String URL = "/api/v1/billing/calculate";
 
-    @BeforeAll static void start() {
+
+    @Test
+    void eventEventIdMissingIsSkipped() throws Exception {
+        assertValidationFixture("events/event-id-missing", 200);
+    }
+
+    @Test
+    void eventEventIdNullIsSkipped() throws Exception {
+        assertValidationFixture("events/event-id-null", 200);
+    }
+
+    @Test
+    void eventEventIdNumberIsSkipped() throws Exception {
+        assertValidationFixture("events/event-id-number", 200);
+    }
+
+    @Test
+    void eventEventIdBooleanIsSkipped() throws Exception {
+        assertValidationFixture("events/event-id-boolean", 200);
+    }
+
+    @Test
+    void eventEventIdArrayIsSkipped() throws Exception {
+        assertValidationFixture("events/event-id-array", 200);
+    }
+
+    @Test
+    void eventEventIdObjectIsSkipped() throws Exception {
+        assertValidationFixture("events/event-id-object", 200);
+    }
+
+    @Test
+    void eventEventIdBlankIsSkipped() throws Exception {
+        assertValidationFixture("events/event-id-blank", 200);
+    }
+
+    @Test
+    void eventUserIdMissingIsSkipped() throws Exception {
+        assertValidationFixture("events/user-id-missing", 200);
+    }
+
+    @Test
+    void eventUserIdNullIsSkipped() throws Exception {
+        assertValidationFixture("events/user-id-null", 200);
+    }
+
+    @Test
+    void eventUserIdNumberIsSkipped() throws Exception {
+        assertValidationFixture("events/user-id-number", 200);
+    }
+
+    @Test
+    void eventUserIdBooleanIsSkipped() throws Exception {
+        assertValidationFixture("events/user-id-boolean", 200);
+    }
+
+    @Test
+    void eventUserIdArrayIsSkipped() throws Exception {
+        assertValidationFixture("events/user-id-array", 200);
+    }
+
+    @Test
+    void eventUserIdObjectIsSkipped() throws Exception {
+        assertValidationFixture("events/user-id-object", 200);
+    }
+
+    @Test
+    void eventUserIdUnknownUserIsSkipped() throws Exception {
+        assertValidationFixture("events/user-id-unknown-user", 200);
+    }
+
+    @Test
+    void eventTimestampMissingIsSkipped() throws Exception {
+        assertValidationFixture("events/timestamp-missing", 200);
+    }
+
+    @Test
+    void eventTimestampNullIsSkipped() throws Exception {
+        assertValidationFixture("events/timestamp-null", 200);
+    }
+
+    @Test
+    void eventTimestampNumberIsSkipped() throws Exception {
+        assertValidationFixture("events/timestamp-number", 200);
+    }
+
+    @Test
+    void eventTimestampBooleanIsSkipped() throws Exception {
+        assertValidationFixture("events/timestamp-boolean", 200);
+    }
+
+    @Test
+    void eventTimestampArrayIsSkipped() throws Exception {
+        assertValidationFixture("events/timestamp-array", 200);
+    }
+
+    @Test
+    void eventTimestampObjectIsSkipped() throws Exception {
+        assertValidationFixture("events/timestamp-object", 200);
+    }
+
+    @Test
+    void eventTimestampInvalidDateIsSkipped() throws Exception {
+        assertValidationFixture("events/timestamp-invalid-date", 200);
+    }
+
+    @Test
+    void eventTimestampOffQuarterHourIsSkipped() throws Exception {
+        assertValidationFixture("events/timestamp-off-quarter-hour", 200);
+    }
+
+    @Test
+    void eventDurationMinutesMissingIsSkipped() throws Exception {
+        assertValidationFixture("events/duration-minutes-missing", 200);
+    }
+
+    @Test
+    void eventDurationMinutesNullIsSkipped() throws Exception {
+        assertValidationFixture("events/duration-minutes-null", 200);
+    }
+
+    @Test
+    void eventDurationMinutesArrayIsSkipped() throws Exception {
+        assertValidationFixture("events/duration-minutes-array", 200);
+    }
+
+    @Test
+    void eventDurationMinutesObjectIsSkipped() throws Exception {
+        assertValidationFixture("events/duration-minutes-object", 200);
+    }
+
+    @Test
+    void eventDurationMinutesStringIsSkipped() throws Exception {
+        assertValidationFixture("events/duration-minutes-string", 200);
+    }
+
+    @Test
+    void eventDurationMinutesDecimalIsSkipped() throws Exception {
+        assertValidationFixture("events/duration-minutes-decimal", 200);
+    }
+
+    @Test
+    void eventDurationMinutesBooleanIsSkipped() throws Exception {
+        assertValidationFixture("events/duration-minutes-boolean", 200);
+    }
+
+    @Test
+    void eventDurationMinutesWrongDurationIsSkipped() throws Exception {
+        assertValidationFixture("events/duration-minutes-wrong-duration", 200);
+    }
+
+    @Test
+    void eventDurationMinutesIntegerOverflowIsSkipped() throws Exception {
+        assertValidationFixture("events/duration-minutes-integer-overflow", 200);
+    }
+
+    @Test
+    void userUserIdMissingRejectsRequest() throws Exception {
+        assertValidationFixture("users/user-id-missing", 400);
+    }
+
+    @Test
+    void userUserIdNullRejectsRequest() throws Exception {
+        assertValidationFixture("users/user-id-null", 400);
+    }
+
+    @Test
+    void userUserIdBlankRejectsRequest() throws Exception {
+        assertValidationFixture("users/user-id-blank", 400);
+    }
+
+    @Test
+    void userUserIdNumberRejectsRequest() throws Exception {
+        assertValidationFixture("users/user-id-number", 400);
+    }
+
+    @Test
+    void userUserIdBooleanRejectsRequest() throws Exception {
+        assertValidationFixture("users/user-id-boolean", 400);
+    }
+
+    @Test
+    void userUserIdArrayRejectsRequest() throws Exception {
+        assertValidationFixture("users/user-id-array", 400);
+    }
+
+    @Test
+    void userUserIdObjectRejectsRequest() throws Exception {
+        assertValidationFixture("users/user-id-object", 400);
+    }
+
+    @Test
+    void userIsEnterpriseMissingRejectsRequest() throws Exception {
+        assertValidationFixture("users/is-enterprise-missing", 400);
+    }
+
+    @Test
+    void userIsEnterpriseNullRejectsRequest() throws Exception {
+        assertValidationFixture("users/is-enterprise-null", 400);
+    }
+
+    @Test
+    void userIsEnterpriseStringRejectsRequest() throws Exception {
+        assertValidationFixture("users/is-enterprise-string", 400);
+    }
+
+    @Test
+    void userIsEnterpriseNumberRejectsRequest() throws Exception {
+        assertValidationFixture("users/is-enterprise-number", 400);
+    }
+
+    @Test
+    void userIsEnterpriseArrayRejectsRequest() throws Exception {
+        assertValidationFixture("users/is-enterprise-array", 400);
+    }
+
+    @Test
+    void userIsEnterpriseObjectRejectsRequest() throws Exception {
+        assertValidationFixture("users/is-enterprise-object", 400);
+    }
+
+    @Test
+    void userTimezoneMissingRejectsRequest() throws Exception {
+        assertValidationFixture("users/timezone-missing", 400);
+    }
+
+    @Test
+    void userTimezoneNullRejectsRequest() throws Exception {
+        assertValidationFixture("users/timezone-null", 400);
+    }
+
+    @Test
+    void userTimezoneBlankRejectsRequest() throws Exception {
+        assertValidationFixture("users/timezone-blank", 400);
+    }
+
+    @Test
+    void userTimezoneNumberRejectsRequest() throws Exception {
+        assertValidationFixture("users/timezone-number", 400);
+    }
+
+    @Test
+    void userTimezoneBooleanRejectsRequest() throws Exception {
+        assertValidationFixture("users/timezone-boolean", 400);
+    }
+
+    @Test
+    void userTimezoneArrayRejectsRequest() throws Exception {
+        assertValidationFixture("users/timezone-array", 400);
+    }
+
+    @Test
+    void userTimezoneObjectRejectsRequest() throws Exception {
+        assertValidationFixture("users/timezone-object", 400);
+    }
+
+    @Test
+    void userTimezoneInvalidZoneRejectsRequest() throws Exception {
+        assertValidationFixture("users/timezone-invalid-zone", 400);
+    }
+
+    /**
+     * Reads complete request/response fixtures; invalid events retain their two valid neighbours.
+     */
+    private void assertValidationFixture(String fixture, int expectedStatus) throws Exception {
+        String requestJson = readJsonResource("validation/" + fixture + ".json");
+        String responsePath = expectedStatus == 200 ? "validation/events/response.json" : "validation/users/response.json";
+        if (fixture.equals("users/timezone-invalid-zone")) {
+            responsePath = "validation/users/invalid-timezone-response.json";
+        }
+        org.springframework.test.web.servlet.ResultActions result = mvc.perform(
+                post(URL).contentType("application/json").content(requestJson));
+        result.andExpect(status().is(expectedStatus))
+                .andExpect(content().json(readJsonResource(responsePath), org.springframework.test.json.JsonCompareMode.STRICT));
+        if (expectedStatus == 200) {
+            result.andExpect(header().string("X-Invalid-Event-Count", "1"));
+        } else {
+            result.andExpect(header().doesNotExist("X-Invalid-Event-Count"));
+        }
+    }
+
+    private String readJsonResource(String path) throws java.io.IOException {
+        return new org.springframework.core.io.ClassPathResource(path)
+                .getContentAsString(java.nio.charset.StandardCharsets.UTF_8);
+    }
+
+    @BeforeAll
+    static void start() {
         context = new SpringApplicationBuilder(FlexiRateApplication.class).run("--server.port=0",
                 "--billing.max-events=50", "--billing.max-users=2", "--billing.max-request-bytes=8192");
         mvc = MockMvcBuilders.webAppContextSetup((WebApplicationContext) context)
                 .addFilters(context.getBean(RequestLimitFilter.class)).build();
     }
-    @AfterAll static void stop() { if (context != null) { context.close(); } }
 
-    @Test void realHttpServerAcceptsSnapshot() throws Exception {
+    @AfterAll
+    static void stop() {
+        if (context != null) {
+            context.close();
+        }
+    }
+
+    @Test
+    void realHttpServerAcceptsSnapshot() throws Exception {
         int port = ((org.springframework.boot.web.server.context.WebServerApplicationContext) context).getWebServer().getPort();
         java.net.http.HttpRequest request = java.net.http.HttpRequest.newBuilder(java.net.URI.create("http://localhost:" + port + URL))
                 .header("Content-Type", "application/json")
@@ -104,12 +401,13 @@ class BillingApiIntegrationTest {
         }
     }
 
-    @Test void validRequestReturnsContractAndInvalidCount() throws Exception {
+    @Test
+    void validRequestReturnsContractAndInvalidCount() throws Exception {
         mvc.perform(post(URL).contentType("application/json").content("""
-                {"users":[{"user_id":"u","is_enterprise":false,"timezone":"UTC"}],
-                 "events":[null,{}, {"event_id":"a","user_id":"u","timestamp":"2026-10-02T00:00:00Z","duration_minutes":15}],
-                 "billing_cycle":"2026-10"}
-                """))
+                        {"users":[{"user_id":"u","is_enterprise":false,"timezone":"UTC"}],
+                         "events":[null,{}, {"event_id":"a","user_id":"u","timestamp":"2026-10-02T00:00:00Z","duration_minutes":15}],
+                         "billing_cycle":"2026-10"}
+                        """))
                 .andExpect(status().isOk()).andExpect(header().string("X-Invalid-Event-Count", "2"))
                 .andExpect(jsonPath("$.invalidEventCount").doesNotExist())
                 .andExpect(jsonPath("$.invalid_event_count").doesNotExist())
@@ -118,7 +416,9 @@ class BillingApiIntegrationTest {
                 .andExpect(jsonPath("$.users[0].tier_breakdown[0].free_hours").value(0.25))
                 .andExpect(jsonPath("$.users[0].applied_surcharges").isEmpty());
     }
-    @Test void missingAndInvalidUsersAreBadRequests() throws Exception {
+
+    @Test
+    void missingAndInvalidUsersAreBadRequests() throws Exception {
         for (String body : new String[]{"{}", "{\"users\":[null],\"events\":[]}",
                 "{\"users\":[{\"user_id\":\"u\",\"timezone\":\"UTC\"}],\"events\":[]}",
                 "{\"users\":[{\"user_id\":\" \",\"is_enterprise\":false,\"timezone\":\"UTC\"}],\"events\":[]}"}) {
@@ -126,27 +426,31 @@ class BillingApiIntegrationTest {
                     .andExpect(jsonPath("$.code").value("INVALID_REQUEST"));
         }
     }
-    @Test void serviceSkipsInvalidValuesAndNonQuarterHourStartTimes() throws Exception {
+
+    @Test
+    void serviceSkipsInvalidValuesAndNonQuarterHourStartTimes() throws Exception {
         mvc.perform(post(URL).contentType("application/json").content("""
-                {"users":[{"user_id":"u","is_enterprise":false,"timezone":"UTC"}],
-                 "billing_cycle":"2026-10",
-                 "events":[
-                   null, {},
-                   {"event_id":"five","user_id":"u","timestamp":"2026-10-02T00:00:00Z","duration_minutes":5},
-                   {"event_id":"ten","user_id":"u","timestamp":"2026-10-02T00:00:00Z","duration_minutes":10},
-                   {"event_id":"twenty-five","user_id":"u","timestamp":"2026-10-02T00:00:00Z","duration_minutes":25},
-                   {"event_id":"thirty","user_id":"u","timestamp":"2026-10-02T00:00:00Z","duration_minutes":30},
-                   {"event_id":"bad-date","user_id":"u","timestamp":"2026-02-30T00:00:00Z","duration_minutes":15},
-                   {"event_id":"no-offset","user_id":"u","timestamp":"2026-10-02T00:00:00","duration_minutes":15},
-                   {"event_id":"off-quarter","user_id":"u","timestamp":"2026-10-02T12:07:00Z","duration_minutes":15},
-                   {"event_id":"valid","user_id":"u","timestamp":"2026-10-02T12:15:00Z","duration_minutes":15,"extra":"ignored"}
-                 ]}
-                """))
+                        {"users":[{"user_id":"u","is_enterprise":false,"timezone":"UTC"}],
+                         "billing_cycle":"2026-10",
+                         "events":[
+                           null, {},
+                           {"event_id":"five","user_id":"u","timestamp":"2026-10-02T00:00:00Z","duration_minutes":5},
+                           {"event_id":"ten","user_id":"u","timestamp":"2026-10-02T00:00:00Z","duration_minutes":10},
+                           {"event_id":"twenty-five","user_id":"u","timestamp":"2026-10-02T00:00:00Z","duration_minutes":25},
+                           {"event_id":"thirty","user_id":"u","timestamp":"2026-10-02T00:00:00Z","duration_minutes":30},
+                           {"event_id":"bad-date","user_id":"u","timestamp":"2026-02-30T00:00:00Z","duration_minutes":15},
+                           {"event_id":"no-offset","user_id":"u","timestamp":"2026-10-02T00:00:00","duration_minutes":15},
+                           {"event_id":"off-quarter","user_id":"u","timestamp":"2026-10-02T12:07:00Z","duration_minutes":15},
+                           {"event_id":"valid","user_id":"u","timestamp":"2026-10-02T12:15:00Z","duration_minutes":15,"extra":"ignored"}
+                         ]}
+                        """))
                 .andExpect(status().isOk())
                 .andExpect(header().string("X-Invalid-Event-Count", "9"))
                 .andExpect(jsonPath("$.users[0].tier_breakdown[0].free_hours").value(0.25));
     }
-    @Test void incompatibleEventTypesAreSkippedWithoutLosingAdjacentValidEvents() throws Exception {
+
+    @Test
+    void incompatibleEventTypesAreSkippedWithoutLosingAdjacentValidEvents() throws Exception {
         for (String item : new String[]{"12", "\"bad\"", "[]", "false", "null", "{}",
                 "{\"duration_minutes\":\"15\"}", "{\"duration_minutes\":15.0}",
                 "{\"duration_minutes\":[15]}", "{\"duration_minutes\":[15,[15]]}",
@@ -155,17 +459,21 @@ class BillingApiIntegrationTest {
             String before = "{\"event_id\":\"before\",\"user_id\":\"u\",\"timestamp\":\"2026-10-02T00:00:00Z\",\"duration_minutes\":15}";
             String after = "{\"event_id\":\"after\",\"user_id\":\"u\",\"timestamp\":\"2026-10-02T00:15:00Z\",\"duration_minutes\":15}";
             mvc.perform(post(URL).contentType("application/json")
-                    .content("{\"users\":[{\"user_id\":\"u\",\"is_enterprise\":false,\"timezone\":\"UTC\"}],"
-                            + "\"billing_cycle\":\"2026-10\",\"events\":[" + before + "," + item + "," + after + "]}"))
+                            .content("{\"users\":[{\"user_id\":\"u\",\"is_enterprise\":false,\"timezone\":\"UTC\"}],"
+                                    + "\"billing_cycle\":\"2026-10\",\"events\":[" + before + "," + item + "," + after + "]}"))
                     .andExpect(status().isOk())
                     .andExpect(header().string("X-Invalid-Event-Count", "1"))
                     .andExpect(jsonPath("$.users[0].tier_breakdown[0].free_hours").value(0.5));
         }
     }
-    @Test void malformedEventsDoNotChangePaidBillAndAreCountedTogether() throws Exception {
+
+    @Test
+    void malformedEventsDoNotChangePaidBillAndAreCountedTogether() throws Exception {
         StringBuilder events = new StringBuilder();
         for (int i = 0; i < 41; i++) {
-            if (i > 0) { events.append(','); }
+            if (i > 0) {
+                events.append(',');
+            }
             events.append("{\"event_id\":\"").append(i)
                     .append("\",\"user_id\":\"u\",\"timestamp\":\"2026-10-02T12:15:00Z\",\"duration_minutes\":15}");
         }
@@ -177,20 +485,24 @@ class BillingApiIntegrationTest {
                 .andExpect(status().isOk()).andExpect(header().string("X-Invalid-Event-Count", "3"))
                 .andExpect(jsonPath("$.users[0].total_cost").value(0.30));
     }
-    @Test void clientArrayExampleAndWrongDurationTypesAreSkippedWithAllOtherFieldsValid() throws Exception {
+
+    @Test
+    void clientArrayExampleAndWrongDurationTypesAreSkippedWithAllOtherFieldsValid() throws Exception {
         for (String duration : new String[]{"[15]", "\"15\"", "15.0", "{\"value\":15}", "null"}) {
             String malformed = "{\"event_id\":\"e1\",\"user_id\":\"user-1\","
                     + "\"timestamp\":\"2026-10-14T10:00:00Z\",\"duration_minutes\":" + duration + "}";
             String valid = "{\"event_id\":\"e2\",\"user_id\":\"user-1\","
                     + "\"timestamp\":\"2026-10-14T10:15:00Z\",\"duration_minutes\":15}";
             mvc.perform(post(URL).contentType("application/json").content(
-                    "{\"users\":[{\"user_id\":\"user-1\",\"is_enterprise\":false,\"timezone\":\"UTC\"}],"
-                            + "\"billing_cycle\":\"2026-10\",\"events\":[" + malformed + "," + valid + "]}"))
+                            "{\"users\":[{\"user_id\":\"user-1\",\"is_enterprise\":false,\"timezone\":\"UTC\"}],"
+                                    + "\"billing_cycle\":\"2026-10\",\"events\":[" + malformed + "," + valid + "]}"))
                     .andExpect(status().isOk()).andExpect(header().string("X-Invalid-Event-Count", "1"))
                     .andExpect(jsonPath("$.users[0].tier_breakdown[0].free_hours").value(0.25));
         }
     }
-    @Test void requestShapeErrorsAreNotTreatedAsInvalidEvents() throws Exception {
+
+    @Test
+    void requestShapeErrorsAreNotTreatedAsInvalidEvents() throws Exception {
         for (String body : new String[]{"{\"users\":[],\"events\":{}}",
                 "{\"users\":[],\"events\":null}",
                 "{\"users\":[{\"user_id\":\"u\",\"is_enterprise\":[],\"timezone\":\"UTC\"}],\"events\":[]}",
@@ -199,16 +511,22 @@ class BillingApiIntegrationTest {
                     .andExpect(status().isBadRequest()).andExpect(jsonPath("$.code").value("INVALID_REQUEST"));
         }
     }
-    @Test void duplicateKeysInAnEventRemainARequestError() throws Exception {
+
+    @Test
+    void duplicateKeysInAnEventRemainARequestError() throws Exception {
         mvc.perform(post(URL).contentType("application/json").content("""
                 {"users":[],"events":[{"event_id":"a","event_id":"b"}]}
                 """)).andExpect(status().isBadRequest());
     }
-    @Test void malformedJsonIsHandledCentrally() throws Exception {
+
+    @Test
+    void malformedJsonIsHandledCentrally() throws Exception {
         mvc.perform(post(URL).contentType("application/json").content("{bad"))
                 .andExpect(status().isBadRequest()).andExpect(jsonPath("$.code").value("INVALID_REQUEST"));
     }
-    @Test void coercionDuplicateJsonKeysAndTrailingDocumentsAreRejected() throws Exception {
+
+    @Test
+    void coercionDuplicateJsonKeysAndTrailingDocumentsAreRejected() throws Exception {
         for (String body : new String[]{
                 "{\"users\":[{\"user_id\":\"u\",\"is_enterprise\":\"false\",\"timezone\":\"UTC\"}],\"events\":[]}",
                 "{\"users\":[],\"users\":[],\"events\":[]}",
@@ -218,7 +536,9 @@ class BillingApiIntegrationTest {
                     .andExpect(status().isBadRequest());
         }
     }
-    @Test void invalidTimezoneAndCycleAreBadRequests() throws Exception {
+
+    @Test
+    void invalidTimezoneAndCycleAreBadRequests() throws Exception {
         mvc.perform(post(URL).contentType("application/json").content("""
                 {"users":[{"user_id":"u","is_enterprise":false,"timezone":"No/Zone"}],"events":[]}
                 """)).andExpect(status().isBadRequest());
@@ -226,16 +546,22 @@ class BillingApiIntegrationTest {
                 {"users":[],"events":[],"billing_cycle":"2026-00"}
                 """)).andExpect(status().isBadRequest());
     }
-    @Test void batchAndBodyLimitsReturn413() throws Exception {
+
+    @Test
+    void batchAndBodyLimitsReturn413() throws Exception {
         mvc.perform(post(URL).contentType("application/json").content("{\"users\":[],\"events\":[" + "null,".repeat(50) + "null]}"))
                 .andExpect(status().isContentTooLarge()).andExpect(jsonPath("$.code").value("BATCH_LIMIT"));
         mvc.perform(post(URL).contentType("application/json").content(" ".repeat(8193)))
                 .andExpect(status().isContentTooLarge()).andExpect(jsonPath("$.code").value("BODY_LIMIT"));
     }
-    @Test void paidBillHasReconciledDtoBreakdown() throws Exception {
+
+    @Test
+    void paidBillHasReconciledDtoBreakdown() throws Exception {
         StringBuilder events = new StringBuilder();
         for (int i = 0; i < 41; i++) {
-            if (i > 0) { events.append(','); }
+            if (i > 0) {
+                events.append(',');
+            }
             events.append("{\"event_id\":\"").append(i)
                     .append("\",\"user_id\":\"u\",\"timestamp\":\"2026-10-02T12:15:00Z\",\"duration_minutes\":15}");
         }
@@ -248,7 +574,9 @@ class BillingApiIntegrationTest {
                 .andExpect(jsonPath("$.users[0].tier_breakdown[0].cost").value(0.25))
                 .andExpect(jsonPath("$.users[0].applied_surcharges[0].cost").value(0.05));
     }
-    @Test void unsupportedMediaAndMethodHaveAppropriateStatuses() throws Exception {
+
+    @Test
+    void unsupportedMediaAndMethodHaveAppropriateStatuses() throws Exception {
         mvc.perform(post(URL).contentType("text/plain").content("{}"))
                 .andExpect(status().isUnsupportedMediaType());
         mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get(URL))

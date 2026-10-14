@@ -1,0 +1,10 @@
+{
+  "users": [
+    {
+      "is_enterprise": false,
+      "timezone": "UTC"
+    }
+  ],
+  "billing_cycle": "2026-10",
+  "events": []
+}

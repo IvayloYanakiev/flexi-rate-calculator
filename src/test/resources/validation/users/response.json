@@ -1,0 +1,4 @@
+{
+  "code": "INVALID_REQUEST",
+  "message": "Provide valid JSON, users with IDs/enterprise flags/timezones, and an events array."
+}

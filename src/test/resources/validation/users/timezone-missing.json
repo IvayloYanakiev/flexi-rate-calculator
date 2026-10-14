@@ -1,0 +1,10 @@
+{
+  "users": [
+    {
+      "user_id": "u",
+      "is_enterprise": false
+    }
+  ],
+  "billing_cycle": "2026-10",
+  "events": []
+}
