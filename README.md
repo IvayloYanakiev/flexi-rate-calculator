@@ -19,7 +19,7 @@ For development, use `mvn spring-boot:run`. The default address is `http://local
 
 ## Try the examples
 
-The [examples folder](examples/README.md) contains **16 scenarios**, each with:
+The [examples folder](examples/scenarios) contains **16 scenarios**, each with:
 
 - Request JSON.
 - Expected response JSON and response headers.
@@ -29,7 +29,7 @@ The [examples folder](examples/README.md) contains **16 scenarios**, each with:
 
 Examples cover normal usage, malformed event types such as `duration_minutes: [15]`, missing fields, duplicate users and events, requests with and without a billing cycle, timezone boundaries, enterprise pricing, peak hours and empty usage.
 
-Import the [Postman collection](examples/flexi-rate.postman_collection.json) to get all requests, saved responses and assertions together. Or copy one command from [CURL-REQUESTS.md](examples/CURL-REQUESTS.md).
+Import the [Postman collection](examples/flexi-rate.postman_collection.json) to get all requests, saved responses and assertions together. Or copy the `curl.txt` command from the scenario you want to try, such as the [valid request example](examples/scenarios/01-valid-with-billing-cycle/README.md).
 
 To run the original paid example from PowerShell:
 
@@ -150,6 +150,12 @@ Broken JSON, duplicate JSON keys and parser-limit violations reject the whole re
 
 For `n` events and `u` users, processing takes **O(n log n + u)** time because events are sorted per user, and **O(n + u)** working space. Each request owns its counters, lists and duplicate-ID set; concurrent requests are tested for isolation.
 
+## Why the current calculator uses memory
+
+Each request supplies the complete usage snapshot. The service calculates the bill from that input, with fresh counters for each user and month. It keeps no billing balance or accumulated usage between requests, so a database is not required for the current calculation contract.
+
+Caffeine is a small performance optimization for month boundaries. It is not a replacement for a database and does not provide durable storage. Losing the cache is safe because the boundaries can be calculated again. Clients retain the original usage logs and save any bills they need to keep. If a request is interrupted, the client can resend the complete snapshot; supplying an explicit billing cycle keeps the requested month stable.
+
 ## Caffeine cache
 
 Caffeine remembers the UTC start and end of a month for a `(timezone, billingCycle)` pair. A repeated lookup can reuse those boundaries.
@@ -176,6 +182,17 @@ The body limit bounds one raw request, not total JVM memory. DTOs and event buff
 A single application instance is the starting point for this assignment. Scaling can be added when measured traffic requires it. Request-owned calculation state already supports independent instances behind a load balancer. Shared client quotas could then be enforced at a gateway.
 
 Caffeine suits the current local calendar cache. If a future deployment needs a cache shared across instances, Redis is an option to evaluate. A distributed cache would add network calls and failure handling, so that change should follow a measured need. Current cache misses are handled by calculating the boundaries locally.
+
+## Improvements for the future in case the system grows larger
+
+The next changes should follow actual traffic and storage requirements:
+
+- **Measure real request performance.** Load-test realistic batch sizes and concurrent users. Track response times, heap usage, garbage collection, invalid-event counts and cache hit rates. Use those measurements to tune body/batch limits and decide when scaling is useful.
+- **Run more instances when needed.** Put independent instances behind a load balancer, with health/readiness checks and graceful shutdown. Keep pricing settings and timezone-rule versions consistent. Use gateway timeouts, request-size limits and shared client quotas to protect capacity.
+- **Add durable storage when the service needs to remember data.** If requests start adding events over time, or users need saved bills and billing history, PostgreSQL would become the source of truth. Store event IDs with a uniqueness rule, use transactions for related updates, and keep money in `NUMERIC(19,2)` columns. Manage schema changes with Liquibase.
+- **Add background notifications when needed.** The current service calculates and returns a bill synchronously, so Kafka or RabbitMQ is not needed for that flow. If a future feature sends emails or SMS messages, a broker could let the billing response finish while a separate worker sends the notification. Choose one broker based on the workload. Persist the notification job reliably before acknowledging it, handle redelivered messages without duplicate sends where possible, and add bounded retries plus a failed-message queue for investigation and replay. If bills are stored in a database, an outbox can save the bill and notification intent in the same transaction. A broker helps delivery reliability; the email or SMS provider's idempotency support determines whether duplicate sends can be prevented.
+- **Share a cache only if it helps.** Consider Redis if future cached data needs to be shared across instances. Independent Caffeine caches already work for the current immutable calendar data. A Redis design should define expiration, invalidation, memory limits, timeouts and whether a cache outage falls back to local calculation.
+- **Add operational visibility and access controls.** Introduce request IDs, structured logs, metrics and alerts while keeping personal usage data out of logs. Add authentication and authorization when exposing billing data to clients, and run the test/coverage checks automatically in CI.
 
 ## Tests and coverage
 
@@ -213,4 +230,4 @@ JaCoCo checks at least **90% overall line coverage**, **85% overall branch cover
 
 [AI session notes](docs/ai-session.md) contain the implementation request, clarifications and work summaries. [Verification notes](docs/verification.md) record commands and results. The [code review](docs/code-review.md) records the architecture and technical reviews and later refinements.
 
-The [requirements and validation review](docs/requirements-review.md) explains how event/user checks meet the assignment and records the second architecture and technical review.
+The review notes explain the validation boundaries and design decisions behind the assignment implementation.
