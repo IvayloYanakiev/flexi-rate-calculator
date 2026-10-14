@@ -1,0 +1,27 @@
+{
+  "users": [
+    {
+      "user_id": "u",
+      "is_enterprise": false,
+      "timezone": "UTC"
+    }
+  ],
+  "billing_cycle": "2026-10",
+  "events": [
+    {
+      "event_id": "before",
+      "user_id": "u",
+      "timestamp": "2026-10-02T00:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "duration_minutes": "15"
+    },
+    {
+      "event_id": "after",
+      "user_id": "u",
+      "timestamp": "2026-10-02T00:15:00Z",
+      "duration_minutes": 15
+    }
+  ]
+}

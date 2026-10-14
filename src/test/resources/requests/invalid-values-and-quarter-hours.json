@@ -1,0 +1,63 @@
+{
+  "users": [
+    {
+      "user_id": "u",
+      "is_enterprise": false,
+      "timezone": "UTC"
+    }
+  ],
+  "billing_cycle": "2026-10",
+  "events": [
+    null,
+    {},
+    {
+      "event_id": "five",
+      "user_id": "u",
+      "timestamp": "2026-10-02T00:00:00Z",
+      "duration_minutes": 5
+    },
+    {
+      "event_id": "ten",
+      "user_id": "u",
+      "timestamp": "2026-10-02T00:00:00Z",
+      "duration_minutes": 10
+    },
+    {
+      "event_id": "twenty-five",
+      "user_id": "u",
+      "timestamp": "2026-10-02T00:00:00Z",
+      "duration_minutes": 25
+    },
+    {
+      "event_id": "thirty",
+      "user_id": "u",
+      "timestamp": "2026-10-02T00:00:00Z",
+      "duration_minutes": 30
+    },
+    {
+      "event_id": "bad-date",
+      "user_id": "u",
+      "timestamp": "2026-02-30T00:00:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "no-offset",
+      "user_id": "u",
+      "timestamp": "2026-10-02T00:00:00",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "off-quarter",
+      "user_id": "u",
+      "timestamp": "2026-10-02T12:07:00Z",
+      "duration_minutes": 15
+    },
+    {
+      "event_id": "valid",
+      "user_id": "u",
+      "timestamp": "2026-10-02T12:15:00Z",
+      "duration_minutes": 15,
+      "extra": "ignored"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "users": [
+    {
+      "user_id": "u",
+      "is_enterprise": false,
+      "timezone": "UTC"
+    }
+  ],
+  "events": [
+    null,
+    {},
+    {
+      "event_id": "a",
+      "user_id": "u",
+      "timestamp": "2026-10-02T00:00:00Z",
+      "duration_minutes": 15
+    }
+  ],
+  "billing_cycle": "2026-10"
+}
