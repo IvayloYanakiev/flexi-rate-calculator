@@ -1,6 +1,6 @@
 {
   "command": "mvn -B clean verify",
-  "verified_at": "2026-10-14T20:09:32+03:00",
+  "verified_at": "2026-10-14T20:20:12+03:00",
   "unit_tests": 118,
   "integration_tests": 86,
   "failures": 0,
@@ -200,5 +200,48 @@
         "percent": 100.0
       }
     }
-  }
+  },
+  "test_methods": 139,
+  "test_classes": [
+    {
+      "name": "RequestLimitFilterTest",
+      "type": "Unit",
+      "executed_cases": 3
+    },
+    {
+      "name": "BillingServiceTest",
+      "type": "Unit",
+      "executed_cases": 51
+    },
+    {
+      "name": "BillingTimeServiceTest",
+      "type": "Unit",
+      "executed_cases": 27
+    },
+    {
+      "name": "NonProgressivePricingPolicyTest",
+      "type": "Unit",
+      "executed_cases": 10
+    },
+    {
+      "name": "UserBillingCalculatorTest",
+      "type": "Unit",
+      "executed_cases": 3
+    },
+    {
+      "name": "ValidationServiceTest",
+      "type": "Unit",
+      "executed_cases": 24
+    },
+    {
+      "name": "BillingApiIntegrationTest",
+      "type": "Integration",
+      "executed_cases": 69
+    },
+    {
+      "name": "ExamplesIntegrationTest",
+      "type": "Integration",
+      "executed_cases": 17
+    }
+  ]
 }

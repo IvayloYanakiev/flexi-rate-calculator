@@ -190,6 +190,21 @@ mvn test          # 118 unit tests
 mvn clean verify # also runs 86 integration tests and checks coverage
 ```
 
+
+| Test class | Type | Executed cases |
+| --- | --- | --- |
+| `RequestLimitFilterTest` | Unit | 3 |
+| `BillingServiceTest` | Unit | 51 |
+| `BillingTimeServiceTest` | Unit | 27 |
+| `NonProgressivePricingPolicyTest` | Unit | 10 |
+| `UserBillingCalculatorTest` | Unit | 3 |
+| `ValidationServiceTest` | Unit | 24 |
+| `BillingApiIntegrationTest` | Integration | 69 |
+| `ExamplesIntegrationTest` | Integration | 17 |
+| **Total** | | **204** |
+
+There are **139 test methods** in the source. Parameterized unit tests run once for each supplied value, producing **204 executed JUnit cases**. Loops and multiple assertions inside a test do not increase the reported JUnit count. `CacheBenchmark` is a manual benchmark and is counted separately from tests.
+
 Latest verified result: **204 tests passed**, **95.30% line coverage**, **88.14% branch coverage**. Four services have 100% line coverage; validation has 94.44%. All services have 100% branch coverage.
 
 JaCoCo checks at least **90% overall line coverage**, **85% overall branch coverage** and **90% line coverage per service**. All production classes are included. Open `target/site/jacoco/index.html` after `verify` for the report. [Saved coverage results](docs/coverage-results.json) record the measured run.
