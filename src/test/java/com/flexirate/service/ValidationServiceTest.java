@@ -39,6 +39,9 @@ class ValidationServiceTest {
         validatorFactory.close();
     }
 
+    /**
+     * Parse 2026-10 into YearMonth.of(2026, 10).
+     */
     @Test
     void validBillingCycleIsParsed() {
         BillingRequestDto billingRequestDto = new BillingRequestDto(List.of(), List.of(), "2026-10");
@@ -48,11 +51,17 @@ class ValidationServiceTest {
         assertEquals(YearMonth.of(2026, 10), billingCycle);
     }
 
+    /**
+     * Return null for an omitted cycle so the time service can resolve each user's current month.
+     */
     @Test
     void absentBillingCycleRequestsCurrentMonth() {
         assertNull(validationService.validateRequest(new BillingRequestDto(List.of(), List.of(), null)));
     }
 
+    /**
+     * Throw BillingException with HTTP 400 and code INVALID_REQUEST for every malformed or unsupported cycle.
+     */
     @ParameterizedTest
     @ValueSource(strings = {"", "2026-1", "2026-00", "2026-13", "0000-01", "9999-12", " 2026-10"})
     void invalidBillingCycleRejectsRequest(String billingCycle) {
@@ -63,6 +72,9 @@ class ValidationServiceTest {
         assertEquals("INVALID_REQUEST", billingException.code());
     }
 
+    /**
+     * Throw BillingException with HTTP 413 and code BATCH_LIMIT when the configured user limit is exceeded.
+     */
     @Test
     void tooManyUsersRejectsRequest() {
         UserDto userDto = new UserDto("alice", false, "UTC");
@@ -75,6 +87,9 @@ class ValidationServiceTest {
         assertEquals("BATCH_LIMIT", billingException.code());
     }
 
+    /**
+     * Throw BillingException with HTTP 413 when the configured event limit is exceeded.
+     */
     @Test
     void tooManyEventsRejectsRequest() {
         EventDto eventDto = validEvent();
@@ -86,6 +101,9 @@ class ValidationServiceTest {
         assertEquals(HttpStatus.CONTENT_TOO_LARGE, billingException.status());
     }
 
+    /**
+     * Preserve alice/bob order, resolve Sofia's ZoneId and preserve bob's enterprise flag.
+     */
     @Test
     void validUsersAreMappedInRequestOrder() {
         BillingRequestDto billingRequestDto = new BillingRequestDto(
@@ -99,6 +117,9 @@ class ValidationServiceTest {
         assertTrue(users.getLast().enterprise());
     }
 
+    /**
+     * Throw BillingException with the exact message "Duplicate user_id.".
+     */
     @Test
     void duplicateUsersRejectRequest() {
         UserDto userDto = new UserDto("alice", false, "UTC");
@@ -109,6 +130,9 @@ class ValidationServiceTest {
         assertEquals("Duplicate user_id.", billingException.getMessage());
     }
 
+    /**
+     * Throw BillingException with the exact message "Invalid user timezone.".
+     */
     @Test
     void invalidTimezoneRejectsRequest() {
         UserDto userDto = new UserDto("alice", false, "Invalid/Timezone");
@@ -119,6 +143,9 @@ class ValidationServiceTest {
         assertEquals("Invalid user timezone.", billingException.getMessage());
     }
 
+    /**
+     * Convert 12:00+03:00 to 09:00Z and preserve the event ID in the returned UsageChunk.
+     */
     @Test
     void validEventIsNormalizedToUtc() {
         Instant timestamp = Instant.parse("2026-10-02T09:00:00Z");
@@ -129,11 +156,17 @@ class ValidationServiceTest {
         assertEquals(new UsageChunk("event-1", timestamp), usageChunk);
     }
 
+    /**
+     * When the time-validation collaborator returns false, return null so the caller can count a skipped event.
+     */
     @Test
     void offQuarterHourEventIsSkipped() {
         assertNull(validationService.validateChunk(validEvent()));
     }
 
+    /**
+     * Return null for missing/non-15 durations before calling the time-validation collaborator.
+     */
     @ParameterizedTest
     @NullSource
     @ValueSource(ints = {-1, 0, 5, 20, 30})
@@ -144,12 +177,18 @@ class ValidationServiceTest {
         verifyNoInteractions(billingTimeService);
     }
 
+    /**
+     * A null event or event with missing fields returns null instead of throwing.
+     */
     @Test
     void missingEventOrFieldsAreSkipped() {
         assertNull(validationService.validateChunk(null));
         assertNull(validationService.validateChunk(new EventDto(null, null, null, null)));
     }
 
+    /**
+     * An unparseable timestamp returns null and never reaches the time-validation collaborator.
+     */
     @Test
     void invalidTimestampIsSkipped() {
         EventDto eventDto = new EventDto("event-1", "alice", "not-a-date", 15);

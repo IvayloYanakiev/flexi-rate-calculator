@@ -43,6 +43,9 @@ class BillingServiceTest {
             new ValidationServiceImpl(properties, validators.getValidator(), mapper, time), time,
             new UserBillingCalculatorImpl(time, new NonProgressivePricingPolicy()));
 
+    /**
+     * Each row must select the expected whole-month tier and exact total cost after the per-user free allowance.
+     */
     @ParameterizedTest
     @CsvSource({"false,439,1,99.75", "false,440,2,80.00", "false,2039,2,399.80",
             "false,2040,3,250.00", "true,399,1,89.75", "true,400,2,72.00",
@@ -56,12 +59,18 @@ class BillingServiceTest {
         assertEquals(new BigDecimal(cost), bill.totalCost());
     }
 
+    /**
+     * 0, 39 and 40 chunks cost $0.00; the 41st off-peak chunk costs $0.25 after 10 free hours.
+     */
     @ParameterizedTest
     @CsvSource({"0,0.00", "39,0.00", "40,0.00", "41,0.25"})
     void graceIsTenHours(int count, String expected) {
         assertEquals(new BigDecimal(expected), bill(false, repeatedChunksAtSameTimestamp("u", count, "2026-10-02T00:00:00Z")).totalCost());
     }
 
+    /**
+     * The first 40 peak chunks are free; only the 41st attracts $0.25 base plus $0.05 surcharge, total $0.30.
+     */
     @Test
     void freePeakUsageHasNoSurcharge() {
         UserBillDto bill = bill(false, repeatedChunksAtSameTimestamp("u", 41, "2026-10-02T12:00:00Z"));
@@ -70,6 +79,9 @@ class BillingServiceTest {
         assertEquals(new BigDecimal("0.25"), bill.appliedSurcharges().getFirst().billablePeakHours());
     }
 
+    /**
+     * The supplied timestamp determines the expected UTC peak surcharge; base plus surcharge must equal the total.
+     */
     @ParameterizedTest
     @CsvSource({"2026-10-02T08:45:00Z,0.00", "2026-10-02T09:00:00Z,0.05",
             "2026-10-02T16:45:00Z,0.05", "2026-10-02T17:00:00Z,0.00",
@@ -83,6 +95,9 @@ class BillingServiceTest {
         assertEquals(bill.tierBreakdown().getFirst().cost().add(actual), bill.totalCost());
     }
 
+    /**
+     * Earlier events consume the free allowance even when listed later; the paid peak chunk costs $0.30.
+     */
     @Test
     void graceIsAssignedByTimeRatherThanInputOrder() {
         // Given: 40 early chunks consume 10 free hours, but the later peak event is listed first.
@@ -92,6 +107,9 @@ class BillingServiceTest {
         assertEquals(new BigDecimal("0.30"), bill(false, events).totalCost());
     }
 
+    /**
+     * Only portions inside the user's local month count; clipped boundary chunks together yield 0.25 free hours.
+     */
     @Test
     void monthlyClippingUsesUsersTimezone() {
         BillingRequestDto request = new BillingRequestDto(List.of(new UserDto("u", false, "+00:07")), List.of(
@@ -102,6 +120,9 @@ class BillingServiceTest {
         assertEquals(new BigDecimal("0.25"), bill.tierBreakdown().getFirst().freeHours());
     }
 
+    /**
+     * At the fixed instant, Los Angeles bills September and Tokyo bills October.
+     */
     @Test
     void currentCycleIsPerUserAtOneInstant() {
         BillingRequestDto request = new BillingRequestDto(List.of(new UserDto("west", false, "America/Los_Angeles"),
@@ -111,6 +132,9 @@ class BillingServiceTest {
         assertEquals("2026-10", bills.get(1).billingCycle());
     }
 
+    /**
+     * Seven valid in-month seconds are accepted; displayed free hours and cost round to 0.00.
+     */
     @Test
     void secondOffsetBoundaryHoursAreRoundedForResponse() {
         BillingResponseDto response = service.calculate(new BillingRequestDto(List.of(new UserDto("u", false, "+00:00:07")),
@@ -120,6 +144,9 @@ class BillingServiceTest {
         assertEquals(new BigDecimal("0.00"), response.users().getFirst().totalCost());
     }
 
+    /**
+     * Clipping retains exactly seven total/free seconds, with zero paid and paid-peak seconds.
+     */
     @Test
     void monthlyClippingPreservesSecondsBeforeDisplayRounding() {
         BillingWindow billingWindow = time.getMonthWindow(ZoneId.of("+00:00:07"), YearMonth.of(2026, 10));
@@ -135,6 +162,9 @@ class BillingServiceTest {
         assertEquals(0, usageSummary.paidPeakSeconds());
     }
 
+    /**
+     * Sofia October spans Sep 30 21:00Z to Oct 31 22:00Z, a 745-hour window including the DST change.
+     */
     @Test
     void dstMonthHasCalendarBoundaries() {
         BillingWindowRepository repo = new BillingWindowRepository(properties);
@@ -144,6 +174,9 @@ class BillingServiceTest {
         assertEquals(745, Duration.between(window.start(), window.end()).toHours());
     }
 
+    /**
+     * Cached and directly calculated timezone/month boundaries must be equal.
+     */
     @Test
     void cacheDisabledProducesTheSameDstWindow() {
         BillingWindowRepository cached = new BillingWindowRepository(properties);
@@ -152,6 +185,9 @@ class BillingServiceTest {
                 uncached.find(ZoneId.of("Europe/Sofia"), YearMonth.of(2026, 3)));
     }
 
+    /**
+     * Each non-15-minute duration increments the invalid count to 1 and leaves the bill at $0.00.
+     */
     @ParameterizedTest
     @org.junit.jupiter.params.provider.ValueSource(ints = {-15, 0, 5, 10, 14, 16, 25, 30})
     void invalidDurationsAreSkipped(int duration) {
@@ -161,6 +197,9 @@ class BillingServiceTest {
         assertEquals(new BigDecimal("0.00"), result.users().getFirst().totalCost());
     }
 
+    /**
+     * Seven malformed, unknown-user or duplicate items are skipped; the valid item contributes 0.25 free hours.
+     */
     @Test
     void invalidItemsAndDuplicatesAreSkippedIndependently() {
         List<EventDto> events = Arrays.asList(event("ok", "u", "2026-10-01T00:00:00Z"),
@@ -173,6 +212,10 @@ class BillingServiceTest {
         assertEquals(new BigDecimal("0.25"), result.users().getFirst().tierBreakdown().getFirst().freeHours());
     }
 
+    /**
+     * The first valid out-of-month event reserves its ID; the later duplicate is counted invalid and adds no
+     * usage.
+     */
     @Test
     void outOfMonthEventsStillReserveTheirIdsBeforeFiltering() {
         BillingResponseDto response = service.calculate(new BillingRequestDto(List.of(new UserDto("u", false, "UTC")),
@@ -182,6 +225,10 @@ class BillingServiceTest {
         assertEquals(new BigDecimal("0.00"), response.users().getFirst().tierBreakdown().getFirst().freeHours());
     }
 
+    /**
+     * The off-quarter event is counted invalid; the later valid event with the same ID contributes 0.25 free
+     * hours.
+     */
     @Test
     void invalidEventDoesNotReserveItsId() {
         BillingResponseDto response = service.calculate(new BillingRequestDto(List.of(new UserDto("u", false, "UTC")),
@@ -191,6 +238,9 @@ class BillingServiceTest {
         assertEquals(new BigDecimal("0.25"), response.users().getFirst().tierBreakdown().getFirst().freeHours());
     }
 
+    /**
+     * Each user receives their own free allowance; an identical snapshot retry returns an equal response.
+     */
     @Test
     void graceIsPerUserAndDoesNotPersistAcrossSnapshots() {
         List<EventDto> events = repeatedChunksAtSameTimestamp("u", 41, "2026-10-02T00:00:00Z");
@@ -201,6 +251,9 @@ class BillingServiceTest {
         first.users().forEach(b -> assertEquals(new BigDecimal("0.25"), b.totalCost()));
     }
 
+    /**
+     * Each invalid request must throw BillingException instead of returning a partial bill.
+     */
     @Test
     void invalidCycleTimezoneAndDuplicateUsersRejectRequest() {
         assertThrows(BillingException.class, () -> service.calculate(new BillingRequestDto(List.of(), List.of(), "2026-13")));
@@ -209,6 +262,10 @@ class BillingServiceTest {
         assertThrows(BillingException.class, () -> service.calculate(new BillingRequestDto(List.of(user, user), List.of(), null)));
     }
 
+    /**
+     * One hundred simultaneous snapshots each receive their own 10 free hours; extra off-peak chunks cost $0.25
+     * each.
+     */
     @Test
     void concurrentRequestsDoNotShareGraceOrUsage() throws Exception {
         // Each request starts with its own 10 free hours. Additional off-peak chunks cost $0.25 each.
@@ -224,6 +281,9 @@ class BillingServiceTest {
         }
     }
 
+    /**
+     * Each accepted UTC quarter-hour timestamp adds a paid peak chunk: invalid count 0 and total $0.30.
+     */
     @ParameterizedTest
     @org.junit.jupiter.params.provider.ValueSource(strings = {"2026-10-02T12:00:00Z", "2026-10-02T12:15:00Z",
             "2026-10-02T12:30:00Z", "2026-10-02T12:45:00Z", "2026-10-02T15:15:00+03:00",
@@ -236,6 +296,9 @@ class BillingServiceTest {
         assertEquals(new BigDecimal("0.30"), response.users().getFirst().totalCost());
     }
 
+    /**
+     * Each misaligned timestamp is skipped: invalid count 1, billable hours 0.00 and total $0.00.
+     */
     @ParameterizedTest
     @org.junit.jupiter.params.provider.ValueSource(strings = {"2026-10-02T12:07:00Z", "2026-10-02T12:14:00Z",
             "2026-10-02T12:15:01Z", "2026-10-02T12:30:00.001Z", "2026-10-02T12:45:00.000000001Z",

@@ -31,6 +31,9 @@ class UserBillingCalculatorTest {
     private final BillingWindow billingWindow = new BillingWindow(
             Instant.parse("2026-10-01T00:00:00Z"), Instant.parse("2026-11-01T00:00:00Z"));
 
+    /**
+     * Call time accounting in timestamp/ID order a, b, later, and sort the request-owned list accordingly.
+     */
     @Test
     void earliestChunksAreProcessedFirstWithEventIdBreakingTies() {
         // Given: the request lists a later event first, and equal-time IDs are out of order.
@@ -49,6 +52,10 @@ class UserBillingCalculatorTest {
         assertEquals(List.of(firstChunk, secondChunk, laterChunk), usageChunks);
     }
 
+    /**
+     * Pass exactly 900 total/free seconds and zero paid-peak seconds to pricing; return the pricing result
+     * unchanged.
+     */
     @Test
     void completedSummaryIsPassedToPricingAndReturnedBillIsPreserved() {
         // Given: the time collaborator records one complete, fully free 15-minute chunk.
@@ -70,6 +77,9 @@ class UserBillingCalculatorTest {
         assertSame(expectedBill, bill);
     }
 
+    /**
+     * Pass a zero usage summary to pricing without calling time accounting.
+     */
     @Test
     void emptyUsageStillProducesAZeroSummaryForPricing() {
         userBillingCalculator.calculate(user, billingCycle, billingWindow, new ArrayList<>());

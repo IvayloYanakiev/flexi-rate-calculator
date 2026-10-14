@@ -24,11 +24,17 @@ class BillingTimeServiceTest {
     private final BillingWindow billingWindow = new BillingWindow(
             Instant.parse("2026-10-01T00:00:00Z"), Instant.parse("2026-11-01T00:00:00Z"));
 
+    /**
+     * Return exactly the fixed clock instant so current-month calculations are deterministic.
+     */
     @Test
     void snapshotUsesInjectedClock() {
         assertEquals(snapshotTime, billingTimeService.snapshotTime());
     }
 
+    /**
+     * Return the explicitly requested month even when the captured clock belongs to a different month.
+     */
     @Test
     void explicitCycleWinsOverCurrentMonth() {
         YearMonth billingCycle = YearMonth.of(2025, 2);
@@ -36,6 +42,9 @@ class BillingTimeServiceTest {
         assertEquals(billingCycle, billingTimeService.getBillingCycle(billingCycle, snapshotTime, ZoneId.of("Asia/Tokyo")));
     }
 
+    /**
+     * When the cycle is omitted, return the expected local month for the supplied timezone.
+     */
     @ParameterizedTest
     @CsvSource({"America/Los_Angeles,2026-09", "Asia/Tokyo,2026-10"})
     void currentCycleUsesUsersLocalDate(String timezone, String expectedBillingCycle) {
@@ -44,6 +53,9 @@ class BillingTimeServiceTest {
         assertEquals(YearMonth.parse(expectedBillingCycle), billingCycle);
     }
 
+    /**
+     * Return the same immutable billing window supplied for the requested timezone and month.
+     */
     @Test
     void monthWindowComesFromCalendarProvider() {
         ZoneId timezone = ZoneId.of("UTC");
@@ -53,6 +65,9 @@ class BillingTimeServiceTest {
         assertSame(billingWindow, billingTimeService.getMonthWindow(timezone, billingCycle));
     }
 
+    /**
+     * Return the expected validity for UTC year, quarter-hour, second and fractional-second boundaries.
+     */
     @ParameterizedTest
     @CsvSource({"2026-10-02T12:00:00Z,true", "2026-10-02T12:15:00Z,true",
             "2026-10-02T12:30:00Z,true", "2026-10-02T12:45:00Z,true",
@@ -63,6 +78,10 @@ class BillingTimeServiceTest {
         assertEquals(expectedValid, billingTimeService.isValidChunkStart(Instant.parse(timestamp)));
     }
 
+    /**
+     * A chunk must overlap real time inside the half-open month window; touching only the outside boundary is
+     * false.
+     */
     @ParameterizedTest
     @CsvSource({"2026-09-30T23:45:00Z,false", "2026-10-01T00:00:00Z,true",
             "2026-10-31T23:45:00Z,true", "2026-11-01T00:00:00Z,false"})
@@ -70,6 +89,9 @@ class BillingTimeServiceTest {
         assertEquals(expectedOverlap, billingTimeService.overlaps(new UsageChunk("event-1", Instant.parse(timestamp)), billingWindow));
     }
 
+    /**
+     * An entirely out-of-month chunk leaves total, free and paid-peak counters at zero.
+     */
     @ParameterizedTest
     @ValueSource(strings = {"2026-09-30T23:45:00Z", "2026-11-01T00:00:00Z"})
     void outsideChunkDoesNotChangeCounters(String timestamp) {
@@ -80,6 +102,10 @@ class BillingTimeServiceTest {
         assertEquals(new UsageSummary(0, 0, 0), usageAccumulator.summary());
     }
 
+    /**
+     * After 9h55m used, a peak chunk adds 5 free and 10 paid minutes: 36,600 total, 36,000 free, 600 paid-peak
+     * seconds.
+     */
     @Test
     void onlyPaidPartOfPeakChunkGetsSurcharge() {
         // Given: 9h55m already used, leaving 5 free minutes out of the 10-hour allowance.
@@ -94,6 +120,9 @@ class BillingTimeServiceTest {
         assertEquals(new UsageSummary(36_600, 36_000, 600), usageAccumulator.summary());
     }
 
+    /**
+     * Only the five-minute intersection counts: 300 total/free seconds and zero paid-peak seconds.
+     */
     @Test
     void chunkIsClippedAtBothMonthBoundaries() {
         // A seven-minute offset means a quarter-hour chunk can straddle a local month boundary.
@@ -106,6 +135,10 @@ class BillingTimeServiceTest {
         assertEquals(new UsageSummary(300, 300, 0), usageAccumulator.summary());
     }
 
+    /**
+     * Return exactly the expected seconds inside daily UTC peak windows, including midnight and multi-day
+     * intervals.
+     */
     @ParameterizedTest
     @CsvSource({"2026-10-02T08:55:00Z,2026-10-02T09:10:00Z,600",
             "2026-10-02T16:55:00Z,2026-10-02T17:10:00Z,300",

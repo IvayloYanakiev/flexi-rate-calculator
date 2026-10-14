@@ -7,6 +7,9 @@ import tools.jackson.databind.json.JsonMapper;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RequestLimitFilterTest {
+    /**
+     * HTTP 413 with BODY_LIMIT; neither reading the request body nor entering the downstream chain is allowed.
+     */
     @Test
     void declaredOversizedBodyIsRejectedBeforeReadingOrDeserializing() throws Exception {
         RequestLimitFilter filter = new RequestLimitFilter(
@@ -30,6 +33,9 @@ class RequestLimitFilterTest {
         assertTrue(response.getContentAsString().contains("BODY_LIMIT"));
     }
 
+    /**
+     * The downstream chain receives the unchanged {} body and the response remains HTTP 200.
+     */
     @Test void boundedBodyRemainsReadableByDownstreamMvc() throws Exception {
         RequestLimitFilter filter = new RequestLimitFilter(new BillingProperties(10, 10, 1024, false, 1), JsonMapper.builder().build());
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -40,6 +46,9 @@ class RequestLimitFilterTest {
         assertEquals(200, response.getStatus());
     }
 
+    /**
+     * An oversized body with unknown length returns HTTP 413 and never enters the downstream chain.
+     */
     @Test void unknownContentLengthCannotBypassBodyLimit() throws Exception {
         RequestLimitFilter filter = new RequestLimitFilter(new BillingProperties(10, 10, 1024, false, 1), JsonMapper.builder().build());
         MockHttpServletRequest request = new MockHttpServletRequest() {

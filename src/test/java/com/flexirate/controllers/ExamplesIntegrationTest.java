@@ -53,86 +53,154 @@ class ExamplesIntegrationTest {
         }
     }
 
+    /**
+     * HTTP 200; X-Invalid-Event-Count: 0; expected totals alice: $0.30. Compare every field in the saved bill
+     * JSON.
+     */
     @Test
     void validWithBillingCycleMatchesExample() throws Exception {
         assertExample("examples/scenarios/01-valid-with-billing-cycle", 200);
     }
 
+    /**
+     * HTTP 200; X-Invalid-Event-Count: 1; expected totals alice: $0.00. Compare every field in the saved bill
+     * JSON.
+     */
     @Test
     void malformedEventTypeMatchesExample() throws Exception {
         assertExample("examples/scenarios/02-malformed-event-type", 200);
     }
 
+    /**
+     * HTTP 400; code INVALID_REQUEST; message "Duplicate user_id."; no X-Invalid-Event-Count header. Compare the
+     * entire saved error JSON.
+     */
     @Test
     void duplicateUsersMatchesExample() throws Exception {
         assertExample("examples/scenarios/03-duplicate-users", 400);
     }
 
+    /**
+     * HTTP 200; X-Invalid-Event-Count: 0; expected totals alice: $0.30. Compare every field in the saved bill
+     * JSON.
+     */
     @Test
     void withoutBillingCycleMatchesExample() throws Exception {
         assertExample("examples/scenarios/04-without-billing-cycle", 200);
     }
 
+    /**
+     * HTTP 200; X-Invalid-Event-Count: 5; expected totals alice: $0.00. Compare every field in the saved bill
+     * JSON.
+     */
     @Test
     void invalidEventValuesMatchesExample() throws Exception {
         assertExample("examples/scenarios/05-invalid-event-values", 200);
     }
 
+    /**
+     * HTTP 200; X-Invalid-Event-Count: 1; expected totals alice: $0.00. Compare every field in the saved bill
+     * JSON.
+     */
     @Test
     void duplicateEventsMatchesExample() throws Exception {
         assertExample("examples/scenarios/06-duplicate-events", 200);
     }
 
+    /**
+     * HTTP 200; X-Invalid-Event-Count: 1; expected totals alice: $0.00. Compare every field in the saved bill
+     * JSON.
+     */
     @Test
     void unknownUserMatchesExample() throws Exception {
         assertExample("examples/scenarios/07-unknown-user", 200);
     }
 
+    /**
+     * HTTP 200; X-Invalid-Event-Count: 0; expected totals alice: $0.00, bob: $0.00. Compare every field in the
+     * saved bill JSON.
+     */
     @Test
     void emptyEventsMatchesExample() throws Exception {
         assertExample("examples/scenarios/08-empty-events", 200);
     }
 
+    /**
+     * HTTP 400; code INVALID_REQUEST; message "Invalid user timezone."; no X-Invalid-Event-Count header. Compare
+     * the entire saved error JSON.
+     */
     @Test
     void invalidTimezoneMatchesExample() throws Exception {
         assertExample("examples/scenarios/09-invalid-timezone", 400);
     }
 
+    /**
+     * HTTP 400; code INVALID_REQUEST; message "billing_cycle must be YYYY-MM."; no X-Invalid-Event-Count header.
+     * Compare the entire saved error JSON.
+     */
     @Test
     void invalidBillingCycleMatchesExample() throws Exception {
         assertExample("examples/scenarios/10-invalid-billing-cycle", 400);
     }
 
+    /**
+     * HTTP 200; X-Invalid-Event-Count: 0; expected totals sofia: $0.00, utc: $0.00. Compare every field in the
+     * saved bill JSON.
+     */
     @Test
     void timezoneMonthBoundaryMatchesExample() throws Exception {
         assertExample("examples/scenarios/11-timezone-month-boundary", 200);
     }
 
+    /**
+     * HTTP 200; X-Invalid-Event-Count: 0; expected totals regular: $90.00, enterprise: $72.00. Compare every field
+     * in the saved bill JSON.
+     */
     @Test
     void enterpriseTierComparisonMatchesExample() throws Exception {
         assertExample("examples/scenarios/12-enterprise-tier-comparison", 200);
     }
 
+    /**
+     * HTTP 200; X-Invalid-Event-Count: 0; expected totals peak: $0.30, off-peak: $0.25. Compare every field in the
+     * saved bill JSON.
+     */
     @Test
     void peakVersusOffPeakMatchesExample() throws Exception {
         assertExample("examples/scenarios/13-peak-versus-off-peak", 200);
     }
 
+    /**
+     * HTTP 200; X-Invalid-Event-Count: 3; expected totals alice: $0.00. Compare every field in the saved bill
+     * JSON.
+     */
     @Test
     void allEventsInvalidMatchesExample() throws Exception {
         assertExample("examples/scenarios/14-all-events-invalid", 200);
     }
 
+    /**
+     * HTTP 400; code INVALID_REQUEST; message "Provide valid JSON, users with IDs/enterprise flags/timezones, and
+     * an events array."; no X-Invalid-Event-Count header. Compare the entire saved error JSON.
+     */
     @Test
     void invalidRequestShapeMatchesExample() throws Exception {
         assertExample("examples/scenarios/15-invalid-request-shape", 400);
     }
 
+    /**
+     * HTTP 400; code INVALID_REQUEST; message "Provide valid JSON, users with IDs/enterprise flags/timezones, and
+     * an events array."; no X-Invalid-Event-Count header. Compare the entire saved error JSON.
+     */
     @Test
     void malformedJsonDocumentMatchesExample() throws Exception {
         assertExample("examples/scenarios/16-malformed-json-document", 400);
     }
 
+    /**
+     * HTTP 200; X-Invalid-Event-Count: 1; expected totals alice: $0.30. Compare every field in the saved bill
+     * JSON.
+     */
     @Test
     void originalPaidExampleMatchesResponse() throws Exception {
         assertExample("examples", 200);

@@ -19,6 +19,9 @@ class NonProgressivePricingPolicyTest {
     private final PricingPolicy pricingPolicy = new NonProgressivePricingPolicy();
     private final YearMonth billingCycle = YearMonth.of(2026, 10);
 
+    /**
+     * Each row selects the expected tier/rate and full paid-hours cost; off-peak usage has no surcharge entry.
+     */
     @ParameterizedTest
     @CsvSource({"false,99,1,1.00,89.00", "false,100,1,1.00,90.00",
             "false,110,2,0.80,80.00", "false,510,3,0.50,250.00",
@@ -40,6 +43,10 @@ class NonProgressivePricingPolicyTest {
         assertTrue(bill.appliedSurcharges().isEmpty());
     }
 
+    /**
+     * After 10 free hours, a paid peak quarter-hour costs $0.25 base + $0.05 surcharge = $0.30 for alice in
+     * 2026-10.
+     */
     @Test
     void paidPeakQuarterHourAddsFiveCents() {
         // Given: 10h15m total, 10h free and the remaining 15 minutes inside peak hours.
@@ -56,6 +63,9 @@ class NonProgressivePricingPolicyTest {
         assertEquals("2026-10", bill.billingCycle());
     }
 
+    /**
+     * Eighteen paid peak seconds round to $0.01 base and $0.00 extra; total equals their sum.
+     */
     @Test
     void separatelyRoundedCostsReconcileWithTotal() {
         // Given: 18 paid peak seconds. Base is $0.005 and the extra charge is $0.001.
@@ -72,6 +82,9 @@ class NonProgressivePricingPolicyTest {
         assertEquals(baseCost.add(surchargeCost), bill.totalCost());
     }
 
+    /**
+     * A free quarter-hour yields total $0.00, free_hours 0.25, billable_hours 0.00 and an empty surcharge list.
+     */
     @Test
     void freeOnlyUsageCostsNothing() {
         Bill bill = pricingPolicy.price(new User("alice", false, ZoneId.of("UTC")), billingCycle,
